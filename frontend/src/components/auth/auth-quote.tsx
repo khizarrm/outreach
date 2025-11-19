@@ -23,7 +23,7 @@ export function AuthQuote() {
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 transition-transform hover:scale-105">
             <Sparkles className="h-5 w-5" />
           </div>
-          <span className="text-xl font-light tracking-tight">applyo</span>
+          <span className="text-xl font-light tracking-tight">outreach</span>
         </div>
 
         {/* Quote */}

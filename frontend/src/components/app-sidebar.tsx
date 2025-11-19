@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, Home, Inbox, Search, Settings, User, LogOut } from "lucide-react"
+import { Calendar, Home, Inbox, Search, Settings, User, LogOut, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
 
@@ -64,14 +64,14 @@ export function AppSidebar() {
 
   // Get user display info - ensure we're working with strings
   const userName = session?.user?.name ? String(session.user.name) : 'Guest';
-  const userEmail = session?.user?.email ? String(session.user.email) : 'guest@applyo.app';
+  const userEmail = session?.user?.email ? String(session.user.email) : 'guest@outreach.app';
   const isAnonymous = !session?.user?.email;
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <div className="flex h-12 items-center px-4 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
-          <span className="font-semibold group-data-[collapsible=icon]:hidden">applyo</span>
+        <div className="flex h-12 items-center gap-2 px-4 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
+          <span className="font-semibold text-lg group-data-[collapsible=icon]:hidden">outreach</span>
           <SidebarTrigger className="ml-auto group-data-[collapsible=icon]:ml-0" />
         </div>
       </SidebarHeader>
@@ -95,37 +95,32 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <div className="flex w-full flex-col gap-2 p-2">
-                  <div className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-sidebar-accent transition-colors">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sidebar-accent">
-                      <User className="h-4 w-4" />
-                    </div>
-                    <div className="flex flex-col overflow-hidden group-data-[collapsible=icon]:hidden">
-                      <span className="text-sm font-medium truncate">
-                        {userName}
-                      </span>
-                      <span className="text-xs text-muted-foreground truncate">
-                        {isAnonymous ? 'Guest User' : userEmail}
-                      </span>
-                    </div>
-                  </div>
-                  <SidebarMenuButton
-                    onClick={handleSignOut}
-                    tooltip="Sign out"
-                    className="w-full justify-start"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span>Sign out</span>
-                  </SidebarMenuButton>
-                </div>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <div className="flex aspect-square size-8 items-center justify-center rounded-full bg-sidebar-primary text-sidebar-primary-foreground">
+                <User className="size-4" />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
+                <span className="truncate font-semibold">{userName}</span>
+                <span className="truncate text-xs font-normal text-muted-foreground">{isAnonymous ? 'Guest User' : userEmail}</span>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={handleSignOut}
+              tooltip="Sign out"
+              className="text-muted-foreground hover:text-destructive"
+            >
+              <LogOut />
+              <span>Sign out</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

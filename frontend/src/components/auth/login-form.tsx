@@ -26,7 +26,7 @@ export function LoginForm() {
     try {
       await authClient.signIn.social({
         provider: 'google',
-        callbackURL: '/',
+        callbackURL: window.location.origin,
       });
       // Redirect is handled automatically by better-auth
     } catch (err) {
