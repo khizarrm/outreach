@@ -2,7 +2,7 @@
 
 import { AuthQuote } from '@/components/auth/auth-quote';
 import { LoginForm } from '@/components/auth/login-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client';
 
@@ -13,6 +13,13 @@ import { authClient } from '@/lib/auth-client';
 export default function LoginPage() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+    if (!isPending) {
+      setIsInitialLoad(false);
+    }
+  }, [isPending]);
 
   useEffect(() => {
     // If already logged in, redirect to home
@@ -21,8 +28,8 @@ export default function LoginPage() {
     }
   }, [session, isPending, router]);
 
-  // Show loading state while checking session
-  if (isPending) {
+  // Show loading state only during initial session check
+  if (isInitialLoad) {
     return (
       <div className="flex h-screen items-center justify-center bg-[#0a0a0a]">
         <div className="text-[#6a6a6a] font-light">Loading...</div>

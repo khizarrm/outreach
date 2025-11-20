@@ -9,3 +9,4 @@ export const companies = sqliteTable("companies", {
   email: text("email").notNull().unique(),
 });
 
+

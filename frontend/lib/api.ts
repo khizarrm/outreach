@@ -225,6 +225,32 @@ export const protectedApi = {
 
     return response.json();
   },
+
+  /**
+   * Send an email using Gmail API
+   */
+  sendEmail: async (data: {
+    to: string;
+    subject: string;
+    body: string;
+  }) => {
+    const response = await apiFetch('/api/protected/email/send', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      try {
+        const errorJson = JSON.parse(errorText);
+        throw new Error(errorJson.message || 'Failed to send email');
+      } catch (e) {
+        throw new Error(errorText || 'Failed to send email');
+      }
+    }
+
+    return response.json();
+  },
 };
 
 // ============= AGENTS API =============

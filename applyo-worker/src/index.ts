@@ -8,6 +8,7 @@ import Prospects from "./agents/prospector";
 import PeopleFinder from "./agents/peoplefinder";
 import EmailFinder from "./agents/emailfinder";
 import Orchestrator from "./agents/orchestrator";
+import { ProtectedEmailSendRoute } from "./endpoints/emailSend";
 import { Agent, AgentNamespace, getAgentByName, routeAgentRequest } from 'agents';
 import { z } from "zod";
 
@@ -697,6 +698,7 @@ openapi.post("/api/agents/prospects", ProspectorRoute);
 openapi.post("/api/agents/peoplefinder", PeopleFinderRoute);
 openapi.post("/api/agents/emailfinder", EmailFinderRoute);
 openapi.post("/api/agents/orchestrator", OrchestratorRoute);
+openapi.post("/api/protected/email/send", ProtectedEmailSendRoute);
 
 
 // ============= END DEMO API ROUTES =============
