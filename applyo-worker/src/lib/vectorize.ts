@@ -298,6 +298,56 @@ export class VectorizeHandler {
         }
     }
 
+    async updateEmployee(employeeId: number) {
+        try {
+            const db = drizzle(this.env.DB, { schema });
+
+            const result = await db.select({
+                employee: employees,
+                company: companyProfiles
+            })
+            .from(employees)
+            .innerJoin(companyProfiles, eq(employees.companyId, companyProfiles.id))
+            .where(eq(employees.id, employeeId))
+            .limit(1)
+            .get();
+
+            if (!result) {
+                return { success: false, error: 'Employee not found' };
+            }
+
+            const { employee, company } = result;
+            const textToEmbed = `${employee.employeeName} ${employee.employeeTitle || ''} ${company.companyName} ${company.description || ''} ${company.industry || ''}`;
+
+            const embedding = await this.env.AI.run('@cf/baai/bge-base-en-v1.5', {
+                text: textToEmbed
+            }) as { data: number[][] };
+
+            await this.env.EMPLOYEE_VECTORS.upsert([{
+                id: `employee_${employee.id}`,
+                values: embedding.data[0],
+                metadata: {
+                    employee_id: employee.id.toString(),
+                    employee_name: employee.employeeName,
+                    employee_title: employee.employeeTitle || '',
+                    email: employee.email || '',
+                    company_id: company.id.toString(),
+                    company_name: company.companyName,
+                    company_website: company.website || '',
+                    company_description: company.description || '',
+                    company_industry: company.industry || '',
+                    company_year_founded: company.yearFounded?.toString() || '',
+                    company_tech_stack: company.techStack || ''
+                }
+            }]);
+
+            return { success: true, message: `Updated vector for ${employee.employeeName}` };
+
+        } catch (error) {
+            return { success: false, error: (error as Error).message };
+        }
+    }
+
     async getStats() {
         try {
             const db = drizzle(this.env.DB, { schema });

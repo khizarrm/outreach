@@ -1,6 +1,6 @@
 'use client';
 
-import { Inbox, Search, Settings, User, LogOut, FileText, Building2 } from "lucide-react"
+import { Search, User, LogOut, FileText, Building2 } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
 import Image from "next/image"
@@ -30,11 +30,6 @@ const items = [
     icon: Search,
   },
   {
-    title: "Inbox",
-    url: "/inbox",
-    icon: Inbox,
-  },
-  {
     title: "Bank",
     url: "/bank",
     icon: Building2,
@@ -43,11 +38,6 @@ const items = [
     title: "Templates",
     url: "/templates",
     icon: FileText,
-  },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
   },
 ]
 

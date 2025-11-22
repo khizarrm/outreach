@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { mutate } from 'swr';
 import { agentsApi, type OrchestratorResponse } from '@/lib/api';
 import { SearchHeader } from '@/components/search/search-header';
 import { SearchForm } from '@/components/search/search-form';
 import { SearchResults } from '@/components/search/search-results';
 import { authClient } from '@/lib/auth-client';
 import { Loader2 } from 'lucide-react';
+
+const COMPANIES_KEY = 'companies';
 
 export default function Home() {
   const router = useRouter();
@@ -32,6 +35,8 @@ export default function Home() {
     try {
       const data = await agentsApi.orchestrator({ query: query.trim() });
       setResult(data);
+      // Invalidate companies cache so bank page shows new companies immediately
+      mutate(COMPANIES_KEY);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to run orchestrator');
     } finally {
