@@ -106,6 +106,15 @@ export const protectedApi = {
     return { subject: result.subject, body: result.body };
   },
 
+  // Companies
+  listCompanies: async () => {
+    const response = await apiFetch('/api/protected/companies', {
+      method: 'GET',
+    });
+    if (!response.ok) throw new Error('Failed to list companies');
+    return response.json();
+  },
+
   // Email
   sendEmail: async (data: { to: string; subject: string; body: string }) => {
     const response = await apiFetch('/api/protected/email/send', {

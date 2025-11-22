@@ -13,6 +13,7 @@ import { ProtectedEmailSendRoute } from "./endpoints/emailSend";
 import { Agent, AgentNamespace, getAgentByName, routeAgentRequest } from 'agents';
 import { z } from "zod";
 import { ProtectedTemplatesCreateRoute, ProtectedTemplatesListRoute, ProtectedTemplatesDeleteRoute, ProtectedTemplatesUpdateRoute, ProtectedTemplateProcessRoute } from "./endpoints/templates";
+import { ProtectedCompaniesListRoute } from "./endpoints/companies";
 import { VectorizePopulateCompaniesRoute, VectorizePopulateEmployeesRoute, VectorizeSearchRoute, VectorizeStatsRoute, VectorizeUpdateCompanyRoute } from "./endpoints/vectorize";
 
 
@@ -763,6 +764,7 @@ openapi.get("/api/protected/templates", ProtectedTemplatesListRoute);
 openapi.delete("/api/protected/templates/:id", ProtectedTemplatesDeleteRoute);
 openapi.put("/api/protected/templates/:id", ProtectedTemplatesUpdateRoute);
 openapi.post("/api/protected/templates/process", ProtectedTemplateProcessRoute);
+openapi.get("/api/protected/companies", ProtectedCompaniesListRoute);
 
 // Vectorize Routes
 openapi.post("/api/vectorize/populate-companies", VectorizePopulateCompaniesRoute);
