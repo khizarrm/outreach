@@ -1,10 +1,10 @@
 'use client';
 
-import { Sparkles } from 'lucide-react';
+import { VideoPlayer } from '@/components/ui/video-player';
 
 /**
  * Auth Quote Component
- * Displays company branding and motivational quote on login page
+ * Displays company branding and video player on login page
  */
 export function AuthQuote() {
   return (
@@ -17,24 +17,55 @@ export function AuthQuote() {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
       
       {/* Content */}
-      <div className="relative z-10 flex flex-col justify-between h-full">
-        {/* Logo and brand */}
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 transition-transform hover:scale-105">
-            <Sparkles className="h-5 w-5" />
-          </div>
-          <span className="text-xl font-light tracking-tight">outreach</span>
+      <div className="relative z-10 flex flex-col h-full gap-8">
+        {/* Brand - Centered at top */}
+        <div className="flex flex-col items-center justify-center pt-8">
+          <h1 className="text-4xl xl:text-5xl font-light tracking-tight text-center mb-2">
+            outreach
+          </h1>
+          <p className="text-lg xl:text-xl font-light text-[#a8a8a8] text-center">
+            don't ask, don't get.
+          </p>
         </div>
 
-        {/* Quote */}
-        <div className="space-y-4 max-w-lg">
-          <blockquote className="text-2xl xl:text-3xl font-light leading-relaxed tracking-tight">
-            "This tool has transformed how we find and connect with decision-makers. 
-            What used to take hours now takes minutes."
-          </blockquote>
-          <footer className="text-sm font-light text-[#a8a8a8]">
-            - Sarah Chen, Growth Lead at TechCorp
-          </footer>
+        {/* Video Player */}
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-full max-w-4xl xl:max-w-5xl">
+            <VideoPlayer
+              src="https://youtu.be/3kL3nEbxLi0"
+              title="Product Demo"
+              aspectRatio="16/9"
+              className="border-white/20 shadow-2xl"
+            />
+          </div>
+        </div>
+
+        {/* Message */}
+        <div className="flex flex-col items-center justify-center pb-8 space-y-3">
+          <p className="text-lg xl:text-xl font-light text-center text-[#e8e8e8] max-w-md leading-relaxed">
+            I got 7+ interviews, 2 internships, and a convo with Mark Cuban from cold emailing. Just ask.
+          </p>
+          <p className="text-sm xl:text-base font-light text-center text-[#a8a8a8] max-w-md">
+            To learn more about the project,{' '}
+            <a
+              href="https://substack.com/@khizar949459/note/c-173113875"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 hover:text-[#e8e8e8] transition-colors"
+            >
+              read here
+            </a>
+            . To see my other stuff,{' '}
+            <a
+              href="https://khizarmalik.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 hover:text-[#e8e8e8] transition-colors"
+            >
+              check here
+            </a>
+            .
+          </p>
         </div>
       </div>
     </div>

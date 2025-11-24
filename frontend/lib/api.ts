@@ -53,6 +53,25 @@ export const agentsApi = {
   },
 };
 
+// Public API (no authentication required)
+export const publicApi = {
+  joinWaitlist: async (data: { email: string; name?: string }) => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
+    const response = await fetch(`${baseUrl}/api/public/waitlist`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ error: 'Failed to join waitlist' }));
+      throw new Error(error.message || error.error || 'Failed to join waitlist');
+    }
+    return response.json();
+  },
+};
+
 // Protected API (requires authentication)
 export const protectedApi = {
   // Templates

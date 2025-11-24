@@ -15,6 +15,7 @@ import { z } from "zod";
 import { ProtectedTemplatesCreateRoute, ProtectedTemplatesListRoute, ProtectedTemplatesDeleteRoute, ProtectedTemplatesUpdateRoute, ProtectedTemplateProcessRoute } from "./endpoints/templates";
 import { ProtectedCompaniesListRoute, ProtectedCompanyEmployeesRoute } from "./endpoints/companies";
 import { VectorizePopulateCompaniesRoute, VectorizePopulateEmployeesRoute, VectorizeSearchRoute, VectorizeStatsRoute, VectorizeUpdateCompanyRoute } from "./endpoints/vectorize";
+import { PublicWaitlistRoute } from "./endpoints/waitlist";
 import { findExistingCompanyAndEmployees } from "./db/companies";
 
 
@@ -796,6 +797,7 @@ class ProtectedDeleteItemRoute extends OpenAPIRoute {
 // Register routes
 openapi.get("/api/public/hello", PublicHelloRoute);
 openapi.get("/api/public/info", PublicInfoRoute);
+openapi.post("/api/public/waitlist", PublicWaitlistRoute);
 openapi.get("/api/protected/profile", ProtectedProfileRoute);
 openapi.post("/api/protected/items", ProtectedCreateItemRoute);
 openapi.get("/api/protected/items", ProtectedListItemsRoute);
