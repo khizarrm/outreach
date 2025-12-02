@@ -1,55 +1,53 @@
 'use client';
 
 import { AuthQuote } from '@/components/auth/auth-quote';
-import { LoginForm } from '@/components/auth/login-form';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { authClient } from '@/lib/auth-client';
+import { SignIn } from '@clerk/nextjs';
 
 /**
  * Login Page
- * Split-screen authentication page with branding and login form
+ * Split-screen authentication page with branding and Clerk sign-in
  */
 export default function LoginPage() {
-  const router = useRouter();
-  const { data: session, isPending } = authClient.useSession();
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-
-  useEffect(() => {
-    if (!isPending) {
-      setIsInitialLoad(false);
-    }
-  }, [isPending]);
-
-  useEffect(() => {
-    // If already logged in, redirect to home
-    if (session?.user && !isPending) {
-      router.push('/');
-    }
-  }, [session, isPending, router]);
-
-  // Show loading state only during initial session check
-  if (isInitialLoad) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-[#0a0a0a]">
-        <div className="text-[#6a6a6a] font-light">Loading...</div>
-      </div>
-    );
-  }
-
-  // Don't render login form if already authenticated
-  if (session?.user) {
-    return null;
-  }
-
   return (
     <div className="relative min-h-screen flex flex-col lg:grid lg:grid-cols-2 lg:max-w-none lg:px-0 overflow-hidden">
       <AuthQuote>
-        <LoginForm />
+        <div className="lg:hidden">
+          <SignIn 
+            appearance={{
+              elements: {
+                rootBox: "mx-auto",
+                card: "bg-[#151515] border-[#2a2a2a] shadow-none",
+                headerTitle: "text-[#e8e8e8] font-light",
+                headerSubtitle: "text-[#6a6a6a] font-light",
+                socialButtonsBlockButton: "bg-[#151515] border-[#2a2a2a] text-[#e8e8e8] hover:bg-[#1a1a1a]",
+                socialButtonsBlockButtonText: "text-[#e8e8e8] font-light",
+                formButtonPrimary: "bg-blue-600 hover:bg-blue-700 text-white font-light",
+                formFieldInput: "bg-[#151515] border-[#2a2a2a] text-[#e8e8e8]",
+                formFieldLabel: "text-[#e8e8e8] font-light",
+                footerActionLink: "text-blue-400 hover:text-blue-300",
+              },
+            }}
+          />
+        </div>
       </AuthQuote>
       <div className="hidden lg:flex lg:p-8 items-center justify-center bg-[#0a0a0a] min-h-screen">
-        <div className="w-full px-4">
-          <LoginForm />
+        <div className="w-full max-w-md">
+          <SignIn 
+            appearance={{
+              elements: {
+                rootBox: "mx-auto",
+                card: "bg-[#151515] border-[#2a2a2a] shadow-none",
+                headerTitle: "text-[#e8e8e8] font-light",
+                headerSubtitle: "text-[#6a6a6a] font-light",
+                socialButtonsBlockButton: "bg-[#151515] border-[#2a2a2a] text-[#e8e8e8] hover:bg-[#1a1a1a]",
+                socialButtonsBlockButtonText: "text-[#e8e8e8] font-light",
+                formButtonPrimary: "bg-blue-600 hover:bg-blue-700 text-white font-light",
+                formFieldInput: "bg-[#151515] border-[#2a2a2a] text-[#e8e8e8]",
+                formFieldLabel: "text-[#e8e8e8] font-light",
+                footerActionLink: "text-blue-400 hover:text-blue-300",
+              },
+            }}
+          />
         </div>
       </div>
     </div>

@@ -5,9 +5,9 @@ import { schema } from "../db";
 
 export class ProtectedEmailSendRoute extends OpenAPIRoute {
     schema = {
-        tags: ["Protected 🔒"],
+        tags: ["API"],
         summary: "Send Email",
-        description: "Send an email using the authenticated user's Google account. Requires authentication via session cookie.",
+        description: "Send an email using Google account credentials.",
         request: {
             body: {
                 content: {
@@ -34,8 +34,8 @@ export class ProtectedEmailSendRoute extends OpenAPIRoute {
                     },
                 },
             },
-            "401": {
-                description: "Unauthorized - No valid session or missing Google account",
+            "501": {
+                description: "Not Implemented - Email sending requires OAuth setup",
                 content: {
                     "application/json": {
                         schema: z.object({
@@ -60,87 +60,16 @@ export class ProtectedEmailSendRoute extends OpenAPIRoute {
     };
 
     async handle(c: any) {
-        const auth = c.get("auth");
         const data = await this.getValidatedData<typeof this.schema>();
         const env = c.env;
 
         try {
-            // 1. Verify Session
-            const session = await auth.api.getSession({
-                headers: c.req.raw.headers,
-            });
-
-            if (!session?.session || !session?.user) {
-                return Response.json(
-                    { error: "Unauthorized", message: "Please login first" },
-                    { status: 401 }
-                );
-            }
-
-            // 2. Get User's Google Credentials
-            const db = drizzle(env.DB, { schema });
-            
-            const account = await db.query.accounts.findFirst({
-                where: (accounts, { and, eq }) => and(
-                    eq(accounts.userId, session.user.id),
-                    eq(accounts.providerId, "google")
-                ),
-            });
-
-            if (!account || !account.accessToken) {
-                return Response.json(
-                    { error: "Unauthorized", message: "No linked Google account found. Please sign in with Google." },
-                    { status: 401 }
-                );
-            }
-
-            // 3. Send Email via Gmail API
-            const { to, subject, body } = data.body;
-
-            // Construct the raw email
-            const emailContent = [
-                `To: ${to}`,
-                `Subject: ${subject}`,
-                "Content-Type: text/plain; charset=utf-8",
-                "MIME-Version: 1.0",
-                "",
-                body
-            ].join("\r\n");
-
-            // Base64Url encode
-            const encodedEmail = btoa(unescape(encodeURIComponent(emailContent)))
-                .replace(/\+/g, '-')
-                .replace(/\//g, '_')
-                .replace(/=+$/, '');
-
-            const gmailResponse = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${account.accessToken}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    raw: encodedEmail
-                }),
-            });
-
-            if (!gmailResponse.ok) {
-                const errorData = await gmailResponse.json() as any;
-                console.error("Gmail API Error:", errorData);
-                return Response.json(
-                    { error: "Gmail API Error", message: errorData.error?.message || "Failed to send email" },
-                    { status: gmailResponse.status === 401 ? 401 : 500 }
-                );
-            }
-
-            const result = await gmailResponse.json() as any;
-
-            return {
-                success: true,
-                message: "Email sent successfully",
-                messageId: result.id,
-            };
-
+            // Note: This endpoint requires Google OAuth credentials to be provided
+            // Authentication has been removed - email sending needs to be implemented with Clerk
+            return Response.json(
+                { error: "Not implemented", message: "Email sending requires OAuth setup" },
+                { status: 501 }
+            );
         } catch (error) {
             console.error("Email send error:", error);
             return Response.json(

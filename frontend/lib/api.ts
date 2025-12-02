@@ -1,4 +1,3 @@
-import { authClient } from './auth-client';
 import { getCachedProfile, setCachedProfile, updateCachedProfile, clearProfileCache } from './profile-cache';
 
 // Types
@@ -16,23 +15,12 @@ export interface OrchestratorResponse {
   favicon?: string;
 }
 
-// Helper function for authenticated API calls
+// Helper function for API calls (authentication removed)
 async function apiFetch(url: string, options: RequestInit = {}) {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
-  const sessionResult = await authClient.getSession();
   
   const headers = new Headers(options.headers);
   headers.set('Content-Type', 'application/json');
-  
-  // Handle different return types from getSession
-  try {
-    const session = (sessionResult as any)?.data?.session || (sessionResult as any)?.session;
-    if (session?.token && typeof session.token === 'string') {
-      headers.set('Cookie', `better-auth.session_token=${session.token}`);
-    }
-  } catch {
-    // If session access fails, continue without auth header
-  }
 
   const response = await fetch(`${baseUrl}${url}`, {
     ...options,

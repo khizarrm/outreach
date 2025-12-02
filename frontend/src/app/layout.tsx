@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from '@clerk/nextjs';
 import { Geist, Geist_Mono } from "next/font/google";
-import { AuthProvider } from "@/providers/auth-provider";
 import { ConditionalLayout } from "@/components/conditional-layout";
 import "./globals.css";
 
@@ -25,14 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark bg-[#0a0a0a]">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0a0a0a] font-sans`}
-      >
-        <AuthProvider>
+    <ClerkProvider>
+      <html lang="en" className="dark bg-[#0a0a0a]">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0a0a0a] font-sans`}
+        >
           <ConditionalLayout>{children}</ConditionalLayout>
-        </AuthProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

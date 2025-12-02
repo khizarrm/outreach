@@ -47,3 +47,6 @@ cloudflare-env.d.ts
 
 # cloudflare workers local development
 .dev.vars
+
+# clerk configuration (can include secrets)
+/.clerk/

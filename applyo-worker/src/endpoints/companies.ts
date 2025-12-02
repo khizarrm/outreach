@@ -7,7 +7,7 @@ import { companyProfiles, employees } from "../db/companies.schema";
 
 export class ProtectedCompaniesListRoute extends OpenAPIRoute {
   schema = {
-    tags: ["Protected 🔒"],
+    tags: ["API"],
     summary: "List All Companies",
     responses: {
       "200": {
@@ -41,12 +41,7 @@ export class ProtectedCompaniesListRoute extends OpenAPIRoute {
   };
 
   async handle(c: any) {
-    const auth = c.get("auth");
     const env = c.env;
-    const session = await auth.api.getSession({ headers: c.req.raw.headers });
-    
-    if (!session?.user) return Response.json({ error: "Unauthorized" }, { status: 401 });
-
     const db = drizzle(env.DB, { schema });
     const allCompanies = await db.query.companyProfiles.findMany({
       orderBy: [desc(companyProfiles.createdAt)],
@@ -75,7 +70,7 @@ export class ProtectedCompaniesListRoute extends OpenAPIRoute {
 
 export class ProtectedCompanyEmployeesRoute extends OpenAPIRoute {
   schema = {
-    tags: ["Protected 🔒"],
+    tags: ["API"],
     summary: "Get Employees by Company ID",
     request: {
       params: z.object({
@@ -110,12 +105,7 @@ export class ProtectedCompanyEmployeesRoute extends OpenAPIRoute {
   };
 
   async handle(c: any) {
-    const auth = c.get("auth");
     const env = c.env;
-    const session = await auth.api.getSession({ headers: c.req.raw.headers });
-    
-    if (!session?.user) return Response.json({ error: "Unauthorized" }, { status: 401 });
-
     const { id } = await this.getValidatedData<typeof this.schema>().then(d => d.params);
 
     const db = drizzle(env.DB, { schema });

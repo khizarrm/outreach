@@ -2,7 +2,6 @@
 
 import { Search, User, LogOut, FileText, Building2, Settings } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
-import { authClient } from "@/lib/auth-client"
 import Image from "next/image"
 import { useState } from "react"
 import Link from "next/link"
@@ -46,7 +45,6 @@ const items = [
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { data: session, isPending } = authClient.useSession();
   const [imageError, setImageError] = useState(false);
   const [showSignOut, setShowSignOut] = useState(false);
   const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
@@ -55,7 +53,7 @@ export function AppSidebar() {
     try {
       // Clear profile cache on sign out
       clearProfileCache();
-      await authClient.signOut();
+      // TODO: Implement Clerk sign out
       router.push('/login');
       router.refresh();
     } catch (error) {
@@ -63,11 +61,11 @@ export function AppSidebar() {
     }
   };
 
-  // Get user display info - ensure we're working with strings
-  const userName = session?.user?.name ? String(session.user.name) : 'Guest';
-  const userEmail = session?.user?.email ? String(session.user.email) : 'guest@outreach.app';
-  const userImage = session?.user?.image ? String(session.user.image) : null;
-  const isAnonymous = !session?.user?.email;
+  // Placeholder user info until Clerk is integrated
+  const userName = 'Guest';
+  const userEmail = 'guest@outreach.app';
+  const userImage = null;
+  const isAnonymous = true;
 
   return (
     <Sidebar collapsible="icon">
