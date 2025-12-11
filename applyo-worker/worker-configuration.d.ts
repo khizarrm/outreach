@@ -4,13 +4,12 @@
 declare namespace Cloudflare {
 	interface GlobalProps {
 		mainModule: typeof import("./src/index");
-		durableNamespaces: "Prospects" | "Profiler";
+		durableNamespaces: "Prospects";
 	}
 	interface Env {
 		OPENAI_API_KEY: string;
 		WEBSEARCH_API: string;
 		Prospects: DurableObjectNamespace<import("./src/index").Prospects>;
-		Profiler: DurableObjectNamespace<import("./src/index").Profiler>;
 		DB: D1Database;
 	}
 }
