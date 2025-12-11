@@ -4,9 +4,9 @@ import { users } from "./auth.schema";
 
 export const templates = sqliteTable("templates", {
   id: text("id").primaryKey(),
-  userId: text("user_id")
+  clerkUserId: text("clerk_user_id")
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(() => users.clerkUserId, { onDelete: "cascade" }),
   name: text("name").notNull(),
   subject: text("subject").notNull(),
   body: text("body").notNull(),

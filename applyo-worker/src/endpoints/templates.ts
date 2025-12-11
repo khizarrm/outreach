@@ -97,7 +97,7 @@ export class ProtectedTemplatesCreateRoute extends OpenAPIRoute {
     
     const newTemplate = {
       id: crypto.randomUUID(),
-      userId: "anonymous",
+      clerkUserId: "anonymous",
       name,
       subject,
       body,

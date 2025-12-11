@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation"
 import Image from "next/image"
 import { useState } from "react"
 import Link from "next/link"
+import { useUser, useClerk } from "@clerk/nextjs"
 import { ProfileSettingsDialog } from "./settings/profile-settings-dialog"
 import { clearProfileCache } from "@/lib/profile-cache"
 
@@ -49,11 +50,15 @@ export function AppSidebar() {
   const [showSignOut, setShowSignOut] = useState(false);
   const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
 
+  const { user, isLoaded } = useUser();
+  const { signOut } = useClerk();
+
   const handleSignOut = async () => {
     try {
       // Clear profile cache on sign out
       clearProfileCache();
-      // TODO: Implement Clerk sign out
+      // Sign out using Clerk
+      await signOut();
       router.push('/login');
       router.refresh();
     } catch (error) {
@@ -61,11 +66,10 @@ export function AppSidebar() {
     }
   };
 
-  // Placeholder user info until Clerk is integrated
-  const userName = 'Guest';
-  const userEmail = 'guest@outreach.app';
-  const userImage = null;
-  const isAnonymous = true;
+  // Get user info from Clerk
+  const userName = user?.fullName || user?.firstName || 'User';
+  const userEmail = user?.emailAddresses?.[0]?.emailAddress || '';
+  const userImage = user?.imageUrl || null;
 
   return (
     <Sidebar collapsible="icon">
@@ -144,7 +148,7 @@ export function AppSidebar() {
               )}
               <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                 <span className="truncate font-semibold">{userName}</span>
-                <span className="truncate text-xs font-normal text-muted-foreground">{isAnonymous ? 'Guest User' : userEmail}</span>
+                <span className="truncate text-xs font-normal text-muted-foreground">{userEmail || 'Loading...'}</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>

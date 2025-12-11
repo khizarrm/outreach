@@ -1,3 +1,4 @@
+import { getToken } from '@clerk/nextjs';
 import { getCachedProfile, setCachedProfile, updateCachedProfile, clearProfileCache } from './profile-cache';
 
 // Types
@@ -15,12 +16,20 @@ export interface OrchestratorResponse {
   favicon?: string;
 }
 
-// Helper function for API calls (authentication removed)
+// Helper function for API calls with Clerk authentication
 async function apiFetch(url: string, options: RequestInit = {}) {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
   
+  // Get Clerk JWT token
+  const token = await getToken();
+  
   const headers = new Headers(options.headers);
   headers.set('Content-Type', 'application/json');
+  
+  // Add Authorization header if token exists
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
+  }
 
   const response = await fetch(`${baseUrl}${url}`, {
     ...options,
