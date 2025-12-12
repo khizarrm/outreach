@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, User, LogOut, FileText, Building2, Settings } from "lucide-react"
+import { Search, User, LogOut, FileText, Settings } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import Image from "next/image"
 import { useState } from "react"
@@ -30,11 +30,6 @@ const items = [
     title: "Search",
     url: "/",
     icon: Search,
-  },
-  {
-    title: "Bank",
-    url: "/bank",
-    icon: Building2,
   },
   {
     title: "Templates",
