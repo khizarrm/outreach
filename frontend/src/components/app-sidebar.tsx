@@ -6,7 +6,7 @@ import Image from "next/image"
 import { useState } from "react"
 import Link from "next/link"
 import { useUser, useClerk } from "@clerk/nextjs"
-import { ProfileSettingsDialog } from "./settings/profile-settings-dialog"
+// import { ProfileSettingsDialog } from "./settings/profile-settings-dialog"
 import { clearProfileCache } from "@/lib/profile-cache"
 
 import {
@@ -31,11 +31,11 @@ const items = [
     url: "/",
     icon: Search,
   },
-  {
-    title: "Templates",
-    url: "/templates",
-    icon: FileText,
-  },
+  // {
+  //   title: "Templates",
+  //   url: "/templates",
+  //   icon: FileText,
+  // },
 ]
 
 export function AppSidebar() {
@@ -43,7 +43,7 @@ export function AppSidebar() {
   const pathname = usePathname();
   const [imageError, setImageError] = useState(false);
   const [showSignOut, setShowSignOut] = useState(false);
-  const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
+  // const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
 
   const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
@@ -70,7 +70,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <div className="flex h-12 items-center gap-2 px-4 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
-          <span className="font-medium text-lg tracking-tight group-data-[collapsible=icon]:hidden">outreach</span>
+          <span className="font-medium text-lg tracking-tight group-data-[collapsible=icon]:hidden">LINKD</span>
           <SidebarTrigger className="ml-auto group-data-[collapsible=icon]:ml-0" />
         </div>
       </SidebarHeader>
@@ -110,7 +110,7 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
           )}
-          <SidebarMenuItem>
+          {/* <SidebarMenuItem>
             <SidebarMenuButton
               onClick={() => setIsSettingsDialogOpen(true)}
               tooltip="Settings"
@@ -119,7 +119,7 @@ export function AppSidebar() {
               <Settings />
               <span>Settings</span>
             </SidebarMenuButton>
-          </SidebarMenuItem>
+          </SidebarMenuItem> */}
           <SidebarMenuItem>
             <SidebarMenuButton
               size="lg"
@@ -149,10 +149,10 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
-      <ProfileSettingsDialog
+      {/* <ProfileSettingsDialog
         open={isSettingsDialogOpen}
         onOpenChange={setIsSettingsDialogOpen}
-      />
+      /> */}
       <SidebarRail />
     </Sidebar>
   )
