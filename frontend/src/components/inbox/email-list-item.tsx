@@ -32,24 +32,27 @@ function ReadReceiptIcon({ status }: { status: Email['readReceiptStatus'] }) {
   switch (status) {
     case 'read':
       return (
-        <CheckCheck 
-          className="h-4 w-4 text-primary" 
-          title="Read"
-        />
+        <span title="Read">
+          <CheckCheck 
+            className="h-4 w-4 text-primary" 
+          />
+        </span>
       );
     case 'unread':
       return (
-        <Check 
-          className="h-4 w-4 text-muted-foreground" 
-          title="Sent (unread)"
-        />
+        <span title="Sent (unread)">
+          <Check 
+            className="h-4 w-4 text-muted-foreground" 
+          />
+        </span>
       );
     case 'pending':
       return (
-        <Clock 
-          className="h-4 w-4 text-muted-foreground" 
-          title="Pending"
-        />
+        <span title="Pending">
+          <Clock 
+            className="h-4 w-4 text-muted-foreground" 
+          />
+        </span>
       );
   }
 }
