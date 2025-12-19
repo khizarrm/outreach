@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { BadgeCheck, Building2, Copy, Check, Mail } from 'lucide-react';
 import type { OrchestratorPerson } from '@/lib/api';
 import { Button } from '@/components/ui/button';
+import { triggerHaptic } from '@/lib/haptics';
 
 interface PersonCardProps {
   person: OrchestratorPerson;
@@ -29,17 +30,27 @@ export function PersonCard({ person, favicon, companyName, index }: PersonCardPr
   const handleCopyEmail = async (email: string) => {
     try {
       await navigator.clipboard.writeText(email);
+
+      // Success haptic feedback
+      triggerHaptic('medium');
+
       setCopiedEmail(email);
       setTimeout(() => setCopiedEmail(null), 2000);
     } catch (error) {
       console.error('Failed to copy email:', error);
+
+      // Error haptic feedback
+      triggerHaptic('error');
     }
   };
 
   return (
     <article
-      className="opacity-0 animate-fade-in-up bg-[#151515] border border-[#2a2a2a] rounded-2xl p-5 sm:p-6 hover:border-[#3a3a3a] transition-all duration-300"
-      style={{ animationDelay: `${index * 0.1}s` }}
+      className="person-card opacity-0 animate-fade-in-up bg-[#151515] border border-[#2a2a2a] rounded-2xl p-5 sm:p-6 hover:border-[#3a3a3a] transition-all duration-300"
+      style={{
+        animationDelay: `${index * 0.1}s`,
+        contain: 'layout style paint'
+      }}
     >
       {hasEmail && firstEmail ? (
         <div className="space-y-4">
@@ -96,7 +107,8 @@ export function PersonCard({ person, favicon, companyName, index }: PersonCardPr
             <Button
               onClick={() => handleCopyEmail(firstEmail)}
               size="sm"
-              className="shrink-0 bg-[#d4af37] hover:bg-[#c49d2a] text-[#0a0a0a] h-8 px-4 rounded-md font-light text-xs"
+              className="shrink-0 bg-[#d4af37] hover:bg-[#c49d2a] text-[#0a0a0a] min-h-[44px] min-w-[44px] px-4 rounded-md font-light text-xs"
+              style={{ touchAction: 'manipulation' }}
             >
               {copiedEmail === firstEmail ? (
                 <>

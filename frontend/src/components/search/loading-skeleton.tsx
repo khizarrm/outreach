@@ -1,14 +1,21 @@
 import React from 'react';
 
-export function LoadingSkeleton() {
+interface LoadingSkeletonProps {
+  isExiting?: boolean;
+}
+
+export function LoadingSkeleton({ isExiting = false }: LoadingSkeletonProps) {
   return (
-    <div className="mt-6 sm:mt-10 md:mt-12">
+    <div className={`mt-6 sm:mt-10 md:mt-12 ${isExiting ? 'animate-fade-out-down' : ''}`}>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-5xl mx-auto">
         {[0, 1, 2].map((i) => (
           <div
             key={i}
-            className="opacity-0 animate-fade-in-up bg-[#151515] border border-[#2a2a2a] rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 flex flex-col"
-            style={{ animationDelay: `${i * 0.1}s` }}
+            className="loading-skeleton-card opacity-0 animate-fade-in-up bg-[#151515] border border-[#2a2a2a] rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 flex flex-col"
+            style={{
+              animationDelay: `${i * 0.1}s`,
+              contain: 'layout style paint'
+            }}
           >
             {/* Name skeleton */}
             <div className="h-7 sm:h-8 md:h-9 w-3/4 bg-[#1a1a1a] rounded-lg mb-2 sm:mb-3 animate-shimmer" />

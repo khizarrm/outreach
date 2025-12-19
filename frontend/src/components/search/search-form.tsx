@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { triggerHaptic } from '@/lib/haptics';
 
 interface SearchFormProps {
   onSearch: (query: string) => void;
@@ -56,6 +57,15 @@ export function SearchForm({ onSearch, isLoading }: SearchFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim() || !isValidUrl(query)) return;
+
+    // Haptic feedback on submit
+    triggerHaptic('light');
+
+    // Blur input to dismiss keyboard on mobile
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
     onSearch(query);
   };
 
@@ -66,11 +76,21 @@ export function SearchForm({ onSearch, isLoading }: SearchFormProps) {
           <div className="relative flex-1">
             <input
               type="text"
+              inputMode="url"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck="false"
               value={query}
               onChange={handleChange}
               onPaste={handlePaste}
               placeholder="Enter website URL (e.g., example.com)"
               onKeyDown={(e) => {
+                // Submit on Enter (standard + mobile "Done" button)
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleSubmit(e);
+                }
+                // Keep Cmd+Enter for power users
                 if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
                   e.preventDefault();
                   handleSubmit(e);
@@ -78,13 +98,15 @@ export function SearchForm({ onSearch, isLoading }: SearchFormProps) {
               }}
               disabled={isLoading}
               className="w-full bg-transparent text-sm sm:text-lg md:text-xl font-light tracking-tight focus:outline-none disabled:opacity-50 min-h-[40px] sm:min-h-0 relative z-10 text-[#f5f5f0] placeholder:text-[#5a5a5a]"
+              style={{ fontSize: 'max(16px, 1rem)' }}
             />
           </div>
 
           <button
             type="submit"
             disabled={isLoading || !query.trim() || !!error}
-            className="flex items-center justify-center gap-2 px-6 py-2.5 sm:py-2 bg-[#d4af37] text-[#0a0a0a] rounded-full text-xs sm:text-sm font-light tracking-wider uppercase hover:bg-[#c49d2a] active:scale-95 transition-all duration-300 disabled:opacity-30 disabled:hover:bg-[#d4af37] disabled:active:scale-100 min-h-[40px] sm:min-h-0"
+            className="flex items-center justify-center gap-2 px-6 py-2.5 sm:py-2 bg-[#d4af37] text-[#0a0a0a] rounded-full text-xs sm:text-sm font-light tracking-wider uppercase hover:bg-[#c49d2a] active:scale-95 transition-all duration-300 disabled:opacity-30 disabled:hover:bg-[#d4af37] disabled:active:scale-100 min-h-[44px] sm:min-h-0"
+            style={{ touchAction: 'manipulation' }}
           >
             {isLoading ? (
               <>

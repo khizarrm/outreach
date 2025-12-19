@@ -10,7 +10,7 @@ const PersonSchema = z.object({
 });
 
 const PeopleResultSchema = z.object({
-  people: z.array(PersonSchema).min(0).max(5)
+  people: z.array(PersonSchema).min(1).max(5)
 });
 
 export const peopleFinder = tool({

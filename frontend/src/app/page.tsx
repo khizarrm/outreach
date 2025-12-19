@@ -7,6 +7,7 @@ import { mutate } from 'swr';
 import { useProtectedApi } from '@/hooks/use-protected-api';
 import type { OrchestratorResponse } from '@/lib/api';
 import { posthog } from '@/../instrumentation-client';
+import { initializeViewportHeight } from '@/lib/viewport';
 import { SearchHeader } from '@/components/search/search-header';
 import { SearchForm } from '@/components/search/search-form';
 import { SearchResults } from '@/components/search/search-results';
@@ -27,6 +28,12 @@ export default function Home() {
       router.push('/login');
     }
   }, [isLoaded, isSignedIn, router]);
+
+  // Initialize viewport height for mobile keyboard handling
+  useEffect(() => {
+    const cleanup = initializeViewportHeight();
+    return cleanup;
+  }, []);
 
   const handleSearch = async (query: string) => {
     setError(null);
@@ -82,8 +89,18 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-[#e8e8e8] font-sans">
-      <main className="flex items-center justify-center min-h-screen px-4 sm:px-6">
+    <div
+      className="bg-[#0a0a0a] text-[#e8e8e8] font-sans"
+      style={{
+        minHeight: 'var(--viewport-height)',
+        paddingTop: 'var(--safe-area-inset-top)',
+        paddingBottom: 'var(--safe-area-inset-bottom)'
+      }}
+    >
+      <main
+        className="flex items-center justify-center px-4 sm:px-6"
+        style={{ minHeight: 'var(--viewport-height)' }}
+      >
         <div className="w-full max-w-4xl -mt-16">
           <SearchHeader />
           
