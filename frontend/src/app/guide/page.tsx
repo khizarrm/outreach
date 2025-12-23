@@ -1,17 +1,27 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 
 export default function GuidePage() {
   const router = useRouter();
+  const [hasHistory, setHasHistory] = useState(false);
+
+  useEffect(() => {
+    // Check if we came from navigation (has referrer from same origin)
+    if (typeof window !== 'undefined') {
+      const referrer = document.referrer;
+      const currentOrigin = window.location.origin;
+      const hasReferrer = referrer && referrer.startsWith(currentOrigin) && referrer !== window.location.href;
+      setHasHistory(hasReferrer);
+    }
+  }, []);
 
   const handleClose = () => {
-    // Check if there's a referrer (came from another page)
-    if (typeof window !== 'undefined' && document.referrer && document.referrer !== window.location.href) {
+    if (hasHistory) {
       router.back();
     } else {
-      // If no referrer (direct link), redirect to login
       router.push('/login');
     }
   };
