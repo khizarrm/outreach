@@ -3,10 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, useSignIn } from '@clerk/nextjs';
-import { Check, Copy, Loader2, Mail, Send, X } from 'lucide-react';
+import { Check, Copy, Loader2, Mail, X } from 'lucide-react';
 import type { OrchestratorResponse } from '@/lib/api';
 import { apiFetch } from '@/lib/api';
 import { triggerHaptic } from '@/lib/haptics';
+import { SearchForm } from '@/components/search/search-form';
 
 const DEMO_TRIES_KEY = 'linkd_demo_tries';
 
@@ -210,7 +211,6 @@ function SignInModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 export default function LoginPage() {
   const { isSignedIn, isLoaded } = useAuth();
   const router = useRouter();
-  const [demoQuery, setDemoQuery] = useState('');
   const [demoLoading, setDemoLoading] = useState(false);
   const [demoResult, setDemoResult] = useState<OrchestratorResponse | null>(null);
   const [demoError, setDemoError] = useState<string | null>(null);
@@ -285,6 +285,14 @@ export default function LoginPage() {
     setShowSignIn(true);
   };
 
+  const handleSearchSubmit = (query: string) => {
+    if (triesRemaining > 0) {
+      handleDemoSearch(query);
+    } else {
+      handleSignIn();
+    }
+  };
+
   return (
     <>
       <SignInModal isOpen={showSignIn} onClose={() => setShowSignIn(false)} />
@@ -325,50 +333,13 @@ export default function LoginPage() {
 
         {/* Input Bar */}
         <div className="w-full max-w-2xl mb-6 opacity-0 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-                <form 
-                  onSubmit={(e) => {
-                    e.preventDefault();
-              if (demoQuery.trim() && triesRemaining > 0 && !demoLoading) {
-                      handleDemoSearch(demoQuery);
-              } else if (triesRemaining <= 0) {
-                handleSignIn();
-                    }
-                  }}
-            className="relative flex items-center"
-                >
-                    <input
-                      type="text"
-                      inputMode="url"
-                      autoCapitalize="none"
-                      autoCorrect="off"
-                      spellCheck="false"
-                      value={demoQuery}
-                      onChange={(e) => setDemoQuery(e.target.value)}
-                      onPaste={(e) => {
-                        e.preventDefault();
-                        const pastedText = e.clipboardData.getData('text');
-                        const cleaned = cleanUrl(pastedText);
-                        setDemoQuery(cleaned);
-                      }}
-              placeholder={triesRemaining <= 0 ? "Sign in to continue searching" : "Type a company website here"}
-                      disabled={demoLoading || triesRemaining <= 0}
-              className="w-full bg-transparent border border-white/20 px-4 py-3 pr-12 rounded text-white placeholder:text-white/40 focus:outline-none focus:border-white/40 transition-all duration-[200ms] caret-white disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{ fontFamily: 'var(--font-fira-mono)', willChange: 'border-color', transform: 'translateZ(0)' }}
-                    />
-                  <button
-                    type="submit"
-              disabled={demoLoading}
-              className="absolute right-2 p-2 text-white/60 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-200"
-              style={{ fontFamily: 'var(--font-fira-mono)' }}
-                  >
-                    {demoLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Send className="w-4 h-4" />
-                    )}
-                  </button>
-                </form>
-                {triesRemaining <= 0 && (
+          <SearchForm
+            onSearch={handleSearchSubmit}
+            isLoading={demoLoading}
+            icon="arrow"
+            placeholder={triesRemaining <= 0 ? "sign in to continue searching" : "type a company website here"}
+          />
+          {triesRemaining <= 0 && (
             <div className="mt-4 p-4 bg-white/5 border border-white/10 rounded text-white/70 text-sm text-center animate-fade-in-up" style={{ fontFamily: 'var(--font-fira-mono)' }}>
               <p className="mb-2">You've used all 3 free tries.</p>
               <button
@@ -378,9 +349,9 @@ export default function LoginPage() {
               >
                 Sign in or create an account to continue
               </button>
-              </div>
-            )}
-              </div>
+            </div>
+          )}
+        </div>
 
             {/* Results Display */}
             {demoResult && !demoLoading && (
@@ -396,17 +367,16 @@ export default function LoginPage() {
 
         {/* Try Another Button */}
         {demoResult && !demoLoading && triesRemaining > 0 && (
-                      <button
-                        onClick={() => {
-                          setDemoResult(null);
-                          setDemoQuery('');
-                          setDemoError(null);
-                        }}
+          <button
+            onClick={() => {
+              setDemoResult(null);
+              setDemoError(null);
+            }}
             className="mt-4 px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded text-sm transition-all duration-[150ms] hover:scale-[1.02] will-change-transform animate-fade-in-up"
             style={{ fontFamily: 'var(--font-fira-mono)', transform: 'translateZ(0)' }}
-                      >
+          >
             Try another
-                      </button>
+          </button>
         )}
       </div>
 

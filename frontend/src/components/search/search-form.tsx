@@ -1,17 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Loader2, Send } from 'lucide-react';
 import { triggerHaptic } from '@/lib/haptics';
 
 interface SearchFormProps {
   onSearch: (query: string) => void;
   isLoading: boolean;
+  icon?: 'arrow' | 'send';
+  placeholder?: string;
 }
 
-export function SearchForm({ onSearch, isLoading }: SearchFormProps) {
+export function SearchForm({ onSearch, isLoading, icon = 'arrow', placeholder = 'type a company website here' }: SearchFormProps) {
   const [query, setQuery] = useState('');
   const [error, setError] = useState('');
+  const [showLoadingMessage, setShowLoadingMessage] = useState(false);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (isLoading) {
+      timer = setTimeout(() => {
+        setShowLoadingMessage(true);
+      }, 3000);
+    } else {
+      setShowLoadingMessage(false);
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isLoading]);
 
   const isValidUrl = (text: string): boolean => {
     if (!text.trim()) return true; // empty is ok
@@ -83,7 +102,7 @@ export function SearchForm({ onSearch, isLoading }: SearchFormProps) {
         value={query}
         onChange={handleChange}
         onPaste={handlePaste}
-        placeholder="type a company website here"
+        placeholder={placeholder}
         disabled={isLoading}
         className="w-full bg-transparent border border-white/20 px-4 py-3 pr-12 rounded text-white placeholder:text-white/40 focus:outline-none focus:border-white/40 transition-all duration-[200ms] caret-white disabled:opacity-50 disabled:cursor-not-allowed"
         style={{ fontFamily: 'var(--font-fira-mono)', willChange: 'border-color', transform: 'translateZ(0)' }}
@@ -96,6 +115,8 @@ export function SearchForm({ onSearch, isLoading }: SearchFormProps) {
       >
         {isLoading ? (
           <Loader2 className="w-4 h-4 animate-spin" />
+        ) : icon === 'send' ? (
+          <Send className="w-4 h-4" />
         ) : (
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -105,6 +126,11 @@ export function SearchForm({ onSearch, isLoading }: SearchFormProps) {
       {error && (
         <p className="absolute -bottom-6 left-0 text-sm text-red-400" style={{ fontFamily: 'var(--font-fira-mono)' }}>
           {error}
+        </p>
+      )}
+      {showLoadingMessage && (
+        <p className="absolute -bottom-6 left-0 right-0 text-sm text-white/50 text-center" style={{ fontFamily: 'var(--font-fira-mono)' }}>
+          this can take up to one minute.
         </p>
       )}
     </form>
