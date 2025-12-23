@@ -309,13 +309,6 @@ export default function LoginPage() {
         >
           sign in
         </button>
-        <button
-          onClick={() => window.open('https://khizarmalik.com', '_blank')}
-          className="text-white/70 hover:text-white transition-colors duration-200 lowercase"
-          style={{ fontFamily: 'var(--font-fira-mono)' }}
-        >
-          my website
-        </button>
       </div>
 
       {/* Main Centered Section */}
