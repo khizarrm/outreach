@@ -104,7 +104,7 @@ export default function GuidePage() {
               the point
             </h3>
             <p className="text-sm md:text-base">
-              save them as much time as possible. you're often reaching out to ceos and busy people, especially through linkedin. make it easy for them to say yes by making it easy for them to read.
+              save them as much time as possible. you're often reaching out to ceos and busy people, especially through linkd. make it easy for them to say yes by making it easy for them to read.
             </p>
           </div>
 
