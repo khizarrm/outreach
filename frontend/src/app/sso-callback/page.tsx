@@ -13,7 +13,7 @@ export default function SSOCallback() {
     const handleCallback = async () => {
       console.log('[SSOCallback] Processing OAuth callback');
       try {
-        await handleRedirectCallback();
+        await handleRedirectCallback({ redirectUrl: '/' });
         console.log('[SSOCallback] Callback successful, redirecting to home');
         router.push('/');
       } catch (err) {
