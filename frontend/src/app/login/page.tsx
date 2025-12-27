@@ -336,7 +336,7 @@ export default function LoginPage() {
         
         {/* Subtitle */}
         <p className="text-lg md:text-xl text-white/60 mb-8 opacity-0 animate-fade-in-up" style={{ animationDelay: '100ms', fontFamily: 'var(--font-fira-mono)' }}>
-          an easier way to outreach (scroll below for more info)
+          an easier way to outreach
         </p>
 
         {/* Input Bar */}
