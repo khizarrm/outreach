@@ -335,8 +335,12 @@ export default function LoginPage() {
           </h1>
         
         {/* Subtitle */}
-        <p className="text-lg md:text-xl text-white/60 mb-8 opacity-0 animate-fade-in-up" style={{ animationDelay: '100ms', fontFamily: 'var(--font-fira-mono)' }}>
+        <p className="text-lg md:text-xl text-white/60 mb-2 opacity-0 animate-fade-in-up" style={{ animationDelay: '100ms', fontFamily: 'var(--font-fira-mono)' }}>
           an easier way to outreach
+        </p>
+
+        <p className="text-xs md:text-sm text-white/40 mb-8 opacity-0 animate-fade-in-up" style={{ animationDelay: '150ms', fontFamily: 'var(--font-fira-mono)' }}>
+          works best for tech companies
         </p>
 
         {/* Input Bar */}
